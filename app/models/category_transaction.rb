@@ -1,0 +1,3 @@
+class CategoryTransaction < ApplicationRecord
+end
+  
