@@ -20,10 +20,10 @@ class TransactionsController < ApplicationController
 
     if @transaction.save
       flash[:success] = "You've just added a new expense."
-      
+
       # Fetch the transactions again after creating the new one
       @transactions = @category.transactions.order(created_at: :desc)
-      
+
       redirect_to category_transactions_path(@category)
     else
       flash.now[:error] = @transaction.errors.full_messages.first
