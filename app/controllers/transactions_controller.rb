@@ -3,7 +3,7 @@ class TransactionsController < ApplicationController
   before_action :set_category
 
   def index
-    @transactions = @category.transactions
+    @transactions = @category.transactions.order(created_at: :desc)
     @total_amount = @transactions.sum(:amount)
   end
 
@@ -20,6 +20,10 @@ class TransactionsController < ApplicationController
 
     if @transaction.save
       flash[:success] = "You've just added a new expense."
+      
+      # Fetch the transactions again after creating the new one
+      @transactions = @category.transactions.order(created_at: :desc)
+      
       redirect_to category_transactions_path(@category)
     else
       flash.now[:error] = @transaction.errors.full_messages.first
@@ -31,7 +35,7 @@ class TransactionsController < ApplicationController
     @transaction = Transaction.find(params[:id])
     @transaction.destroy
     flash[:success] = 'Expense item has been removed.'
-    redirect_to category_transaction_path
+    redirect_to category_transactions_path(@category)
   end
 
   private
